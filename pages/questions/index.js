@@ -47,8 +47,6 @@ export default function index() {
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
                 setBool(true);
-                console.log(info);
-                setTest(info.row.original);
               }}
             >
               <FaEye />
@@ -64,12 +62,14 @@ export default function index() {
       },
     ];
   }, []);
-
+  // border shadow-lg rounded drop-shadow-2xl bg-white opacity-100
+  // flex items-center justify-center w-full min-h-screen bg-slate-100 opacity-20
   return (
     <Layout>
       <main className="">
-        <dialog className="border shadow-lg rounded drop-shadow-2xl " open={isOpen}>
-          <div className="w-[720px] ma-h-[700px] overflow-auto">
+        <dialog className="border drop-shadow-lg" open={isOpen}>
+          {/* <div className=" bg-blue-400">test</div> */}
+          <div className="w-[720px] max-h-[700px] overflow-auto">
             <section className="flex items-center w-full bg-slate-600 rounded-t p-3">
               <h1 className="text-white text-xl font-bold mr-auto">Modal Header</h1>
               <button className="text-white text-lg" onClick={() => setBool(false)}>
