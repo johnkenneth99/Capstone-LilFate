@@ -11,7 +11,8 @@ const YEAR_LEVELS = Object.freeze([{ label: "1" }, { label: "2" }, { label: "3" 
 const DIFFICULTIES = Object.freeze([{ label: "Easy" }, { label: "Medium" }, { label: "Hard" }]);
 
 const INITIAL_VALUES = Object.freeze({
-  answer: "My answer...",
+  answer: null,
+  question: null,
   subject: null,
   option_1: null,
   option_2: null,
@@ -33,7 +34,7 @@ export default function QuestionForm() {
         initialValues={INITIAL_VALUES}
         validationSchema={QUESTION_VALIDATION_SCHEMA}
         validateOnBlur={false}
-        validateOnChange={false}
+        validateOnChange
         validateOnMount
         enableReinitialize
       >
@@ -46,7 +47,7 @@ export default function QuestionForm() {
                 <Dropdown label="Difficulty" options={DIFFICULTIES} />
               </div>
               <div className="row-span-2 grid gap-3 col-span-2">
-                <TextAreaField label="Question" rows={4} resize="none" />
+                <TextAreaField label="Question" rows={4} name="question" />
               </div>
               <div className="grid grid-cols-2 gap-3 col-span-2">
                 <InputField label="Option 1" name="option_1" />
