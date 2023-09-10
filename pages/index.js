@@ -19,7 +19,7 @@ export default function Home() {
         >
           LOGIN
         </button>
-        <button className="w-96 bg-gray-500 rounded text-white text-md font-medium p-2 hover:bg-gray-200">Forgot password?</button>
+        {/* <button className="w-96 bg-gray-500 rounded text-white text-md font-medium p-2 hover:bg-gray-200">Forgot password?</button> */}
       </div>
     </main>
   );
