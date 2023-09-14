@@ -13,7 +13,7 @@ import QuestionTable from "@/components/Tables/QuestionTable";
 
 import { COLLECTION } from "@/constants";
 
-export default function index() {
+export default function Index() {
   const [documents, setDocuments] = useState([]);
   const { bool: isOpen, setBool, toggle } = useBoolean(false);
 
