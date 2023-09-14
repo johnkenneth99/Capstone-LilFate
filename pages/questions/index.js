@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { limit } from "firebase/firestore";
 import { FaPlus, FaXmark } from "react-icons/fa6";
+import handler from "../api/hello";
 
 import useBoolean from "@/hooks/useBoolean";
 import useFireStore from "@/hooks/useFireStore";
@@ -21,6 +22,7 @@ export default function Index() {
 
   useEffect(() => {
     if (data) {
+      console.log(handler());
       setDocuments(parseDocuments(data));
     }
   }, [data]);
