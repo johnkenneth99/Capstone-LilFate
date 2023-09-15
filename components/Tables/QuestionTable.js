@@ -6,7 +6,7 @@ import Table from "@/components/Table";
 import QuestionForm from "@/components/Forms/QuestionForm";
 import useBoolean from "@/hooks/useBoolean";
 
-import { STATUS, STATUS_LABEL } from "@/constants";
+import { DIALOG_LABELS, STATUS, STATUS_LABEL } from "@/constants";
 import Dialog from "@/components/Dialog";
 
 const INITIAL_FORM_DATA = Object.freeze({
@@ -16,7 +16,8 @@ const INITIAL_FORM_DATA = Object.freeze({
 
 function QuestionTable({ data }) {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-  const { bool: isOpen, setBool, toggle, setFalse, setTrue } = useBoolean(false);
+  const { bool: isOpen, setFalse, setTrue } = useBoolean(false);
+  const [dialogHeader, setDialogHeader] = useState(null);
 
   const columns = useMemo(() => {
     return [
@@ -52,8 +53,8 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
-                console.log("SDKFJSKDF");
                 setFormData({ isDisabled: true, data: info.row.original });
+                setDialogHeader(DIALOG_LABELS.QUESTION_VIEW);
                 setTrue();
               }}
             >
@@ -63,7 +64,8 @@ function QuestionTable({ data }) {
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
                 setFormData({ isDisabled: false, data: info.row.original });
-                toggle();
+                setDialogHeader(DIALOG_LABELS.QUESTION_UPDATE);
+                setTrue();
               }}
             >
               <FaPen />
@@ -79,7 +81,7 @@ function QuestionTable({ data }) {
 
   return (
     <>
-      <Dialog header="Question Details" isOpen={isOpen} toggle={toggle} content={<QuestionForm {...formData} />} />
+      <Dialog header={dialogHeader} isOpen={isOpen} setFalse={setFalse} content={<QuestionForm {...formData} />} />
       <Table data={data} columns={columns} />
     </>
   );

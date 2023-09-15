@@ -8,6 +8,11 @@ export const FIREBASE_CONFIG = {
   measurementId: "G-QE09ZCRT1F",
 };
 
+export const DIALOG_LABELS = {
+  QUESTION_VIEW: "Question Details",
+  QUESTION_UPDATE: "Update Question Details",
+};
+
 export const STATUS = {
   REJECTED: 0,
   APPROVED: 1,
