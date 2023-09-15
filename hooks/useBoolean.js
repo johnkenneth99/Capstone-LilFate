@@ -6,5 +6,14 @@ export default function useBoolean(defaultValue) {
   const toggle = () => {
     setBool((current) => !current);
   };
-  return { bool, toggle, setBool };
+
+  const setTrue = () => {
+    setBool(true);
+  };
+
+  const setFalse = () => {
+    setBool(false);
+  };
+
+  return { bool, toggle, setBool, setTrue, setFalse };
 }

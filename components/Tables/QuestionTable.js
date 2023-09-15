@@ -1,10 +1,23 @@
 import classNames from "classnames";
+import { memo, useMemo, useState } from "react";
+import { FaTrashCan, FaPen, FaEye, FaXmark } from "react-icons/fa6";
+
 import Table from "@/components/Table";
-import { memo, useMemo } from "react";
-import { FaTrashCan, FaPen, FaEye } from "react-icons/fa6";
+import QuestionForm from "@/components/Forms/QuestionForm";
+import useBoolean from "@/hooks/useBoolean";
+
 import { STATUS, STATUS_LABEL } from "@/constants";
+import Dialog from "@/components/Dialog";
+
+const INITIAL_FORM_DATA = Object.freeze({
+  isDisabled: false,
+  formData: null,
+});
 
 function QuestionTable({ data }) {
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const { bool: isOpen, setBool, toggle, setFalse, setTrue } = useBoolean(false);
+
   const columns = useMemo(() => {
     return [
       { header: "Subject", accessorKey: "subject" },
@@ -34,12 +47,25 @@ function QuestionTable({ data }) {
       },
       {
         header: "Actions",
-        cell: () => (
+        cell: (info) => (
           <div className="flex items-center justify-center gap-5">
-            <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400" onClick={() => {}}>
+            <button
+              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+              onClick={() => {
+                console.log("SDKFJSKDF");
+                setFormData({ isDisabled: true, data: info.row.original });
+                setTrue();
+              }}
+            >
               <FaEye />
             </button>
-            <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400">
+            <button
+              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+              onClick={() => {
+                setFormData({ isDisabled: false, data: info.row.original });
+                toggle();
+              }}
+            >
               <FaPen />
             </button>
             <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400">
@@ -53,6 +79,7 @@ function QuestionTable({ data }) {
 
   return (
     <>
+      <Dialog header="Question Details" isOpen={isOpen} toggle={toggle} content={<QuestionForm {...formData} />} />
       <Table data={data} columns={columns} />
     </>
   );
