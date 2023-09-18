@@ -34,3 +34,14 @@ export const ACTIONS = {
   SUCCESS: 0,
   ERROR: 1,
 };
+
+export const DROP_DOWN_OPTIONS = {
+  YEAR_LEVEL: [{ label: "1" }, { label: "2" }, { label: "3" }],
+  DIFFICULTY: [{ label: "Easy" }, { label: "Medium" }, { label: "Hard" }],
+  SUBJECT: [{ label: "Math" }, { label: "Science" }, { label: "English" }],
+  STATUS: [
+    { value: "approved", label: "Approved" },
+    { value: "pending", label: "Pending" },
+    { value: "reject", label: "Rejected" },
+  ],
+};

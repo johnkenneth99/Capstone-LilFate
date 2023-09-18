@@ -6,7 +6,7 @@ export default function Dropdown({ name = null, label = null, options = [], disa
   const [field, { error, touched }] = useField(name);
 
   return (
-    <div className="flex flex-col focus-within:text-blue-400 mb-0">
+    <div className="flex flex-col w-full focus-within:text-blue-400 mb-0">
       <label className="relative top-6 left-2 text-sm font-medium">{label}</label>
       <select
         placeholder="Subject"

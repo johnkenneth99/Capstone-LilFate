@@ -19,7 +19,7 @@ export default function Dialog({ header = null, isOpen = false, content = null, 
   };
 
   return (
-    <dialog className="border-0 drop-shadow-lg rounded-t backdrop:bg-slate-950 backdrop:opacity-50" ref={modalRef}>
+    <dialog className="border-0 drop-shadow-lg rounded-t backdrop:bg-black backdrop:opacity-60" ref={modalRef}>
       <div className="w-[720px] max-h-[700px] overflow-auto">
         <section className="flex items-center w-full bg-slate-600 p-3">
           <h1 className="text-white text-xl font-bold mr-auto">{header}</h1>

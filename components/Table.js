@@ -6,12 +6,12 @@ export default function Table({ data = [], columns = [] }) {
 
   return (
     <section className="flex flex-row justify-center items-center">
-      <table className="border text-lg text-slate-600 w-full">
+      <table className="border text-lg text-slate-600 w-full shadow-lg">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th className="border p-4 bg-slate-500 text-white font-medium" key={header.id}>
+                <th className="border p-4 bg-slate-600 text-white font-medium" key={header.id}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}

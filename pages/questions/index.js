@@ -6,10 +6,25 @@ import useFireStore from "@/hooks/useFireStore";
 import { parseDocuments } from "@/functions/helpers";
 
 import Layout from "@/components/Layout";
+import Dropdown from "@/components/Dropdown";
 import { PrimaryButton } from "@/components/Buttons";
 import QuestionTable from "@/components/Tables/QuestionTable";
 
-import { COLLECTION } from "@/constants";
+import { COLLECTION, DROP_DOWN_OPTIONS } from "@/constants";
+import { Form, Formik } from "formik";
+
+const DROP_DOWN_FIELDS = [
+  { name: "subject", label: "Subject", options: DROP_DOWN_OPTIONS.SUBJECT },
+  { name: "year_level", label: "Year Level", options: DROP_DOWN_OPTIONS.YEAR_LEVEL },
+  { name: "difficulty", label: "Difficulty", options: DROP_DOWN_OPTIONS.DIFFICULTY },
+  { name: "status", label: "Status", options: DROP_DOWN_OPTIONS.STATUS },
+];
+
+const INITIAL_VALUE = {
+  subject: null,
+  year_level: null,
+  difficulty: null,
+};
 
 export default function Index() {
   const [documents, setDocuments] = useState([]);
@@ -21,12 +36,28 @@ export default function Index() {
       setDocuments(parseDocuments(data));
     }
   }, [data]);
+
   return (
     <Layout>
       {!isLoading && (
         <main>
-          <section className="flex justify-end my-5 gap-2">
-            <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => toggle()} />
+          <section>
+            <Formik initialValues={INITIAL_VALUE} validateOnBlur={false} validateOnChange={false} validateOnMount enableReinitialize>
+              {(props) => (
+                <Form>
+                  <div className="grid grid-cols-8 my-5 gap-5">
+                    {DROP_DOWN_FIELDS.map((item, index) => (
+                      <div className="col-span-1" key={index}>
+                        <Dropdown {...item} />
+                      </div>
+                    ))}
+                    <div className="col-span-1 col-end-9 flex justify-end items-center ">
+                      <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => toggle()} />
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </section>
 
           <QuestionTable data={documents} />
