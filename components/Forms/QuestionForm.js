@@ -38,50 +38,48 @@ function QuestionForm({ isDisabled = true, data = null }) {
   };
 
   return (
-    <>
-      <Formik
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        validationSchema={QUESTION_VALIDATION_SCHEMA}
-        validateOnBlur={false}
-        validateOnChange
-        validateOnMount
-        enableReinitialize
-      >
-        {({ submitForm }) => (
-          <Form>
-            {isDataReady && (
-              <section className="grid grid-rows-5 grid-cols-2 gap-0 p-5">
-                <div className="grid grid-cols-3 gap-3 col-span-2">
-                  <Dropdown label="Subject" name="subject" options={SUBJECTS} disabled={isDisabled} />
-                  <Dropdown label="Year Level" name="year_level" options={YEAR_LEVELS} disabled={isDisabled} />
-                  <Dropdown label="Difficulty" name="difficulty" options={DIFFICULTIES} disabled={isDisabled} />
+    <Formik
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      validationSchema={QUESTION_VALIDATION_SCHEMA}
+      validateOnBlur={false}
+      validateOnChange
+      validateOnMount
+      enableReinitialize
+    >
+      {({ submitForm }) => (
+        <Form>
+          {isDataReady && (
+            <section className="grid grid-rows-5 grid-cols-2 gap-0 p-5">
+              <div className="grid grid-cols-3 gap-3 col-span-2">
+                <Dropdown label="Subject" name="subject" options={SUBJECTS} disabled={isDisabled} />
+                <Dropdown label="Year Level" name="year_level" options={YEAR_LEVELS} disabled={isDisabled} />
+                <Dropdown label="Difficulty" name="difficulty" options={DIFFICULTIES} disabled={isDisabled} />
+              </div>
+              <div className="row-span-2 grid gap-3 col-span-2">
+                <TextAreaField label="Question" rows={4} name="question" disabled={isDisabled} />
+              </div>
+              <div className="grid grid-cols-2 gap-3 col-span-2">
+                <InputField label="Option 1" name="option_1" disabled={isDisabled} />
+                <InputField label="Option 2" name="option_2" disabled={isDisabled} />
+              </div>
+              <div className="grid grid-cols-2 gap-3 col-span-2">
+                <InputField label="Option 3" name="option_3" disabled={isDisabled} />
+                <InputField label="Option 4" name="option_4" disabled={isDisabled} />
+              </div>
+              <div className="col-span-2">
+                <InputField type="text" label="Answer" name="answer" disabled={isDisabled} />
+              </div>
+              {!isDisabled && (
+                <div className="flex justify-end col-span-2 mt-5">
+                  <PrimaryButton label="Create" onClick={() => submitForm()} />
                 </div>
-                <div className="row-span-2 grid gap-3 col-span-2">
-                  <TextAreaField label="Question" rows={4} name="question" disabled={isDisabled} />
-                </div>
-                <div className="grid grid-cols-2 gap-3 col-span-2">
-                  <InputField label="Option 1" name="option_1" disabled={isDisabled} />
-                  <InputField label="Option 2" name="option_2" disabled={isDisabled} />
-                </div>
-                <div className="grid grid-cols-2 gap-3 col-span-2">
-                  <InputField label="Option 3" name="option_3" disabled={isDisabled} />
-                  <InputField label="Option 4" name="option_4" disabled={isDisabled} />
-                </div>
-                <div className="col-span-2">
-                  <InputField type="text" label="Answer" name="answer" disabled={isDisabled} />
-                </div>
-                {!isDisabled && (
-                  <div className="flex justify-end col-span-2 mt-5">
-                    <PrimaryButton label="Create" onClick={() => submitForm()} />
-                  </div>
-                )}
-              </section>
-            )}
-          </Form>
-        )}
-      </Formik>
-    </>
+              )}
+            </section>
+          )}
+        </Form>
+      )}
+    </Formik>
   );
 }
 

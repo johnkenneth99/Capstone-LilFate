@@ -1,35 +1,19 @@
-import { useEffect, useState } from "react";
-import { limit } from "firebase/firestore";
-import { FaPlus } from "react-icons/fa6";
+import { limit, where } from "firebase/firestore";
+import { useCallback, useEffect, useState } from "react";
 
-import useFireStore from "@/hooks/useFireStore";
 import { parseDocuments } from "@/functions/helpers";
+import useFireStore from "@/hooks/useFireStore";
 
 import Layout from "@/components/Layout";
-import Dropdown from "@/components/Dropdown";
-import { PrimaryButton } from "@/components/Buttons";
 import QuestionTable from "@/components/Tables/QuestionTable";
 
-import { COLLECTION, DROP_DOWN_OPTIONS } from "@/constants";
-import { Form, Formik } from "formik";
-
-const DROP_DOWN_FIELDS = [
-  { name: "subject", label: "Subject", options: DROP_DOWN_OPTIONS.SUBJECT },
-  { name: "year_level", label: "Year Level", options: DROP_DOWN_OPTIONS.YEAR_LEVEL },
-  { name: "difficulty", label: "Difficulty", options: DROP_DOWN_OPTIONS.DIFFICULTY },
-  { name: "status", label: "Status", options: DROP_DOWN_OPTIONS.STATUS },
-];
-
-const INITIAL_VALUE = {
-  subject: null,
-  year_level: null,
-  difficulty: null,
-};
+import QuestionSearchForm from "@/components/Forms/QuestionSearchForm";
+import { COLLECTION } from "@/constants";
 
 export default function Index() {
   const [documents, setDocuments] = useState([]);
 
-  const { data, isLoading } = useFireStore(COLLECTION.QUESTIONS, limit(15));
+  const { data, search, isLoading } = useFireStore(COLLECTION.QUESTIONS, limit(15));
 
   useEffect(() => {
     if (data) {
@@ -37,29 +21,31 @@ export default function Index() {
     }
   }, [data]);
 
+  const handleSubmit = useCallback((values) => {
+    const query = [];
+
+    for (const [key, value] of Object.entries(values)) {
+      if (value !== null) {
+        query.push(where(String(key), "==", castValue(key, value)));
+      }
+    }
+
+    search(query);
+  }, []);
+
+  const castValue = (key, value) => {
+    return isNumberValue(key) ? Number(value) : String(value);
+  };
+
+  const isNumberValue = (key) => {
+    return key === "status" || key === "year_level";
+  };
+
   return (
     <Layout>
       {!isLoading && (
         <main>
-          <section>
-            <Formik initialValues={INITIAL_VALUE} validateOnBlur={false} validateOnChange={false} validateOnMount enableReinitialize>
-              {(props) => (
-                <Form>
-                  <div className="grid grid-cols-8 my-5 gap-5">
-                    {DROP_DOWN_FIELDS.map((item, index) => (
-                      <div className="col-span-1" key={index}>
-                        <Dropdown {...item} />
-                      </div>
-                    ))}
-                    <div className="col-span-1 col-end-9 flex justify-end items-center ">
-                      <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => toggle()} />
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </section>
-
+          <QuestionSearchForm handleSubmit={handleSubmit} />
           <QuestionTable data={documents} />
         </main>
       )}

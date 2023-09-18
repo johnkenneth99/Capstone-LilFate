@@ -8,6 +8,7 @@ import useBoolean from "@/hooks/useBoolean";
 
 import { DIALOG_LABELS, STATUS, STATUS_LABEL } from "@/constants";
 import Dialog from "@/components/Dialog";
+import { titleCase } from "@/functions/helpers";
 
 const INITIAL_FORM_DATA = Object.freeze({
   isDisabled: false,
@@ -21,9 +22,9 @@ function QuestionTable({ data }) {
 
   const columns = useMemo(() => {
     return [
-      { header: "Subject", accessorKey: "subject" },
-      { header: "Year Level", accessorKey: "level" },
-      { header: "Difficulty", accessorKey: "difficulty" },
+      { header: "Subject", accessorKey: "subject", cell: ({ getValue }) => <>{titleCase(getValue())}</> },
+      { header: "Year Level", accessorKey: "year_level" },
+      { header: "Difficulty", accessorKey: "difficulty", cell: ({ getValue }) => <>{titleCase(getValue())}</> },
       { header: "Question", accessorKey: "question" },
       {
         header: "Status",
