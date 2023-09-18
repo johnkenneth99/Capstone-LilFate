@@ -56,8 +56,8 @@ export const DROP_DOWN_OPTIONS = {
   ],
   STATUS: [
     { value: "", label: "Select status" },
-    { value: "approved", label: "Approved" },
-    { value: "pending", label: "Pending" },
-    { value: "reject", label: "Rejected" },
+    { value: 0, label: "Rejected" },
+    { value: 1, label: "Approved" },
+    { value: 2, label: "Pending" },
   ],
 };
