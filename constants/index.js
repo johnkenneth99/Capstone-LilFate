@@ -36,10 +36,26 @@ export const ACTIONS = {
 };
 
 export const DROP_DOWN_OPTIONS = {
-  YEAR_LEVEL: [{ label: "1" }, { label: "2" }, { label: "3" }],
-  DIFFICULTY: [{ label: "Easy" }, { label: "Medium" }, { label: "Hard" }],
-  SUBJECT: [{ label: "Math" }, { label: "Science" }, { label: "English" }],
+  YEAR_LEVEL: [
+    { value: "", label: "Select year level" },
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+  ],
+  DIFFICULTY: [
+    { value: "", label: "Select difficulty" },
+    { value: "easy", label: "Easy" },
+    { value: "medium", label: "Medium" },
+    { value: "hard", label: "Hard" },
+  ],
+  SUBJECT: [
+    { value: "", label: "Select subject" },
+    { value: "math", label: "Math" },
+    { value: "science", label: "Science" },
+    { value: "english", label: "English" },
+  ],
   STATUS: [
+    { value: "", label: "Select status" },
     { value: "approved", label: "Approved" },
     { value: "pending", label: "Pending" },
     { value: "reject", label: "Rejected" },
