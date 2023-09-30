@@ -23,15 +23,18 @@ const INITIAL_VALUES = Object.freeze({
   difficulty: null,
 });
 
-function QuestionForm({ isDisabled = true, data = null, formikRef = null }) {
+const FormButtons = () => {};
+
+function QuestionForm({ isDisabled = false, data = null, formikRef = null, isNew = false }) {
   const [isDataReady, setIsDataReady] = useState(false);
   const [initialValues, setInitialValues] = useState(INITIAL_VALUES);
 
   useEffect(() => {
     if (data) {
       setInitialValues((currentValues) => ({ ...currentValues, ...data }));
-      setIsDataReady(true);
     }
+
+    setIsDataReady(true);
   }, [data]);
 
   const handleSubmit = (values) => {
@@ -49,7 +52,7 @@ function QuestionForm({ isDisabled = true, data = null, formikRef = null }) {
       validateOnMount
       enableReinitialize
     >
-      {({ submitForm }) => (
+      {() => (
         <Form>
           {isDataReady && (
             <section className="grid grid-rows-5 grid-cols-2 gap-0 p-5">
@@ -74,7 +77,7 @@ function QuestionForm({ isDisabled = true, data = null, formikRef = null }) {
               </div>
               {!isDisabled && (
                 <div className="flex justify-end col-span-2 mt-5">
-                  <PrimaryButton label="Create" onClick={() => submitForm()} />
+                  <PrimaryButton label={isNew ? "Create" : "Update"} type="submit" />
                 </div>
               )}
             </section>

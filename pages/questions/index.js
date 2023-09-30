@@ -21,7 +21,7 @@ export default function Index() {
     }
   }, [data]);
 
-  const handleSubmit = useCallback((values) => {
+  const handleSubmit = (values) => {
     const query = [];
 
     for (const [key, value] of Object.entries(values)) {
@@ -31,7 +31,7 @@ export default function Index() {
     }
 
     search(query);
-  }, []);
+  };
 
   const castValue = (key, value) => {
     return isNumberValue(key) ? Number(value) : String(value);

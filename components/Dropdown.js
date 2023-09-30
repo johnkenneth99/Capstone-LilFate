@@ -11,7 +11,7 @@ export default function Dropdown({ name = null, label = null, options = [], disa
 
   return (
     <div className="flex flex-col w-full focus-within:text-blue-400 mb-0">
-      <label className={labelClass} for={id}>
+      <label className={labelClass} htmlFor={id}>
         {label}
       </label>
       <select

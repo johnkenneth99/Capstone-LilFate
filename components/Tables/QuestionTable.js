@@ -1,13 +1,12 @@
 import classNames from "classnames";
-import { memo, useMemo, useState, useRef } from "react";
-import { FaTrashCan, FaPen, FaEye, FaXmark } from "react-icons/fa6";
+import { memo, useMemo, useRef, useState } from "react";
+import { FaEye, FaPen, FaTrashCan } from "react-icons/fa6";
 
 import Table from "@/components/Table";
-import useBoolean from "@/hooks/useBoolean";
 
+import QuestionDialog from "@/components/Dialogs/QuestionDialog";
 import { DIALOG_LABELS, STATUS, STATUS_LABEL } from "@/constants";
 import { titleCase } from "@/functions/helpers";
-import QuestionDialog from "@/components/Dialogs/QuestionDialog";
 
 const INITIAL_FORM_DATA = Object.freeze({
   isDisabled: false,
@@ -16,7 +15,7 @@ const INITIAL_FORM_DATA = Object.freeze({
 
 const INITIAL_DIALOG_DATA = Object.freeze({
   isDisabled: false,
-  formData: null,
+  data: null,
   header: null,
 });
 
@@ -61,9 +60,8 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
-                setDialogData;
-                setFormData({ isDisabled: true, data: info.row.original });
-                setDialogHeader(DIALOG_LABELS.QUESTION_VIEW);
+                setDialogData({ isDisabled: true, data: info.row.original, header: DIALOG_LABELS.QUESTION_VIEW });
+
                 dialogRef.current.showModal();
               }}
             >
@@ -72,8 +70,7 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
-                setFormData({ isDisabled: false, data: info.row.original });
-                setDialogHeader(DIALOG_LABELS.QUESTION_UPDATE);
+                setDialogData({ isDisabled: false, data: info.row.original, header: DIALOG_LABELS.QUESTION_UPDATE });
 
                 dialogRef.current.showModal();
               }}
@@ -91,7 +88,7 @@ function QuestionTable({ data }) {
 
   return (
     <>
-      <QuestionDialog header={dialogHeader} formData={formData} dialogRef={dialogRef} />
+      <QuestionDialog dialogRef={dialogRef} {...dialogData} />
       <Table data={data} columns={columns} />
     </>
   );

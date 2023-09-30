@@ -1,10 +1,11 @@
-import { memo } from "react";
+import { memo, useRef } from "react";
 import { FaPlus } from "react-icons/fa6";
 import Dropdown from "@/components/Dropdown";
 import { PrimaryButton } from "@/components/Buttons";
 import { Form, Formik } from "formik";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { DROP_DOWN_OPTIONS } from "@/constants";
+import { DROP_DOWN_OPTIONS, DIALOG_LABELS } from "@/constants";
+import QuestionDialog from "@/components/Dialogs/QuestionDialog";
 
 const DROP_DOWN_FIELDS = [
   { name: "subject", label: "Subject", options: DROP_DOWN_OPTIONS.SUBJECT },
@@ -20,34 +21,37 @@ const INITIAL_VALUE = {
   difficulty: null,
 };
 // TODO: Create validation schema for search form
-function QuestionSearchForm({ handleSubmit, ...props }) {
+export default function QuestionSearchForm({ handleSubmit, ...props }) {
+  const dialogRef = useRef(null);
+
   return (
-    <Formik
-      onSubmit={handleSubmit}
-      initialValues={INITIAL_VALUE}
-      validateOnBlur={false}
-      validateOnChange
-      validateOnMount
-      enableReinitialize
-      {...props}
-    >
-      {() => (
-        <Form>
-          <div className="grid grid-cols-8 my-5 gap-5">
-            {DROP_DOWN_FIELDS.map((item, index) => (
-              <div className="col-span-1" key={index}>
-                <Dropdown {...item} />
+    <>
+      <Formik
+        onSubmit={handleSubmit}
+        initialValues={INITIAL_VALUE}
+        validateOnBlur={false}
+        validateOnChange
+        validateOnMount
+        enableReinitialize
+        {...props}
+      >
+        {() => (
+          <Form>
+            <div className="grid grid-cols-8 my-5 gap-5">
+              {DROP_DOWN_FIELDS.map((item, index) => (
+                <div className="col-span-1" key={index}>
+                  <Dropdown {...item} />
+                </div>
+              ))}
+              <div className="flex justify-end items-end col-span-2 col-end-9 gap-5 ">
+                <PrimaryButton icon={<FaMagnifyingGlass />} label="Search" type="submit" />
+                <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => dialogRef.current.showModal()} />
               </div>
-            ))}
-            <div className="flex justify-end items-end col-span-2 col-end-9 gap-5 ">
-              <PrimaryButton icon={<FaMagnifyingGlass />} label="Search" type="submit" />
-              <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => {}} />
             </div>
-          </div>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+      <QuestionDialog header={DIALOG_LABELS.QUESTION_ADD} dialogRef={dialogRef} isNew />
+    </>
   );
 }
-
-export default memo(QuestionSearchForm);

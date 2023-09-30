@@ -9,8 +9,9 @@ export const FIREBASE_CONFIG = {
 };
 
 export const DIALOG_LABELS = {
-  QUESTION_VIEW: "Question Details",
-  QUESTION_UPDATE: "Update Question Details",
+  QUESTION_VIEW: "View Question",
+  QUESTION_UPDATE: "Update Question",
+  QUESTION_ADD: "New Question",
 };
 
 export const STATUS = {
