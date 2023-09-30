@@ -5,6 +5,7 @@ import InputField from "@/components/InputField";
 import { Formik, Form } from "formik";
 import { QUESTION_VALIDATION_SCHEMA } from "@/schemas/QuestionValidationSchema";
 import { PrimaryButton } from "../Buttons";
+import { DROP_DOWN_OPTIONS } from "@/constants";
 
 const SUBJECTS = Object.freeze([{ label: "Math" }, { label: "Science" }, { label: "English" }]);
 const YEAR_LEVELS = Object.freeze([{ label: "1" }, { label: "2" }, { label: "3" }]);
@@ -22,7 +23,7 @@ const INITIAL_VALUES = Object.freeze({
   difficulty: null,
 });
 
-function QuestionForm({ isDisabled = true, data = null }) {
+function QuestionForm({ isDisabled = true, data = null, formikRef = null }) {
   const [isDataReady, setIsDataReady] = useState(false);
   const [initialValues, setInitialValues] = useState(INITIAL_VALUES);
 
@@ -39,10 +40,11 @@ function QuestionForm({ isDisabled = true, data = null }) {
 
   return (
     <Formik
+      innerRef={formikRef}
       onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={QUESTION_VALIDATION_SCHEMA}
-      validateOnBlur={false}
+      validateOnBlur
       validateOnChange
       validateOnMount
       enableReinitialize
@@ -52,9 +54,9 @@ function QuestionForm({ isDisabled = true, data = null }) {
           {isDataReady && (
             <section className="grid grid-rows-5 grid-cols-2 gap-0 p-5">
               <div className="grid grid-cols-3 gap-3 col-span-2">
-                <Dropdown label="Subject" name="subject" options={SUBJECTS} disabled={isDisabled} />
-                <Dropdown label="Year Level" name="year_level" options={YEAR_LEVELS} disabled={isDisabled} />
-                <Dropdown label="Difficulty" name="difficulty" options={DIFFICULTIES} disabled={isDisabled} />
+                <Dropdown label="Subject" name="subject" options={DROP_DOWN_OPTIONS.SUBJECT} disabled={isDisabled} />
+                <Dropdown label="Year Level" name="year_level" options={DROP_DOWN_OPTIONS.YEAR_LEVEL} disabled={isDisabled} />
+                <Dropdown label="Difficulty" name="difficulty" options={DROP_DOWN_OPTIONS.DIFFICULTY} disabled={isDisabled} />
               </div>
               <div className="row-span-2 grid gap-3 col-span-2">
                 <TextAreaField label="Question" rows={4} name="question" disabled={isDisabled} />
