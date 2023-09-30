@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef } from "react";
-import { FIREBASE_CONFIG, ACTIONS } from "@/constants";
+import { FIREBASE_CONFIG, ACTIONS, STATUS } from "@/constants";
 import { initializeApp } from "firebase/app";
-import { collection as getCollection, query as buildQuery, getDocs, getFirestore } from "firebase/firestore";
+import { collection as getCollection, query as buildQuery, getDocs, getFirestore, addDoc } from "firebase/firestore";
 
 const INITIAL_VALUE = {
   data: null,
@@ -49,24 +49,38 @@ export default function useFireStore(name = null, ...constraints) {
     }
   };
 
+  const addDocument = async (params) => {
+    const data = {
+      ...params,
+      status: STATUS.PENDING,
+      created_at: new Date().toJSON(),
+      created_by: 1,
+      updated_at: new Date().toJSON(),
+      updated_by: 1,
+    };
+
+    const documentRef = await addDoc(collectionRef.current, data);
+  };
+
   useEffect(() => {
     if (dbRef.current === null) return;
 
-    (async () => {
-      const collectionReference = getCollection(dbRef.current, name);
+    collectionRef.current = getCollection(dbRef.current, name);
 
-      const query = buildQuery(collectionReference, ...constraints);
+    if (!!constraints.length) {
+      (async () => {
+        const query = buildQuery(collectionRef.current, ...constraints);
 
-      try {
-        const querySnapshot = await getDocs(query);
+        try {
+          const querySnapshot = await getDocs(query);
 
-        collectionRef.current = collectionReference;
-        dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot });
-      } catch (error) {
-        dispatch({ type: ACTIONS.ERROR, value: error });
-      }
-    })();
+          dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot });
+        } catch (error) {
+          dispatch({ type: ACTIONS.ERROR, value: error });
+        }
+      })();
+    }
   }, []);
 
-  return { ...state, search };
+  return { ...state, search, addDocument };
 }

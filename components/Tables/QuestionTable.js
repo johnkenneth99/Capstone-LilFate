@@ -28,9 +28,9 @@ function QuestionTable({ data }) {
 
   const columns = useMemo(() => {
     return [
-      { header: "Subject", accessorKey: "subject", cell: ({ getValue }) => <>{titleCase(getValue())}</> },
+      { header: "Subject", accessorKey: "subject", cell: ({ getValue }) => <>{getValue() && titleCase(getValue())}</> },
       { header: "Year Level", accessorKey: "year_level" },
-      { header: "Difficulty", accessorKey: "difficulty", cell: ({ getValue }) => <>{titleCase(getValue())}</> },
+      { header: "Difficulty", accessorKey: "difficulty", cell: ({ getValue }) => <>{getValue() && titleCase(getValue())}</> },
       { header: "Question", accessorKey: "question" },
       {
         header: "Status",
