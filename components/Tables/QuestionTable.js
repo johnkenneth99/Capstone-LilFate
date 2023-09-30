@@ -1,23 +1,30 @@
 import classNames from "classnames";
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo, useState, useRef } from "react";
 import { FaTrashCan, FaPen, FaEye, FaXmark } from "react-icons/fa6";
 
 import Table from "@/components/Table";
-import QuestionForm from "@/components/Forms/QuestionForm";
 import useBoolean from "@/hooks/useBoolean";
 
 import { DIALOG_LABELS, STATUS, STATUS_LABEL } from "@/constants";
-import Dialog from "@/components/Dialog";
 import { titleCase } from "@/functions/helpers";
+import QuestionDialog from "@/components/Dialogs/QuestionDialog";
 
 const INITIAL_FORM_DATA = Object.freeze({
   isDisabled: false,
   formData: null,
 });
 
+const INITIAL_DIALOG_DATA = Object.freeze({
+  isDisabled: false,
+  formData: null,
+  header: null,
+});
+
 function QuestionTable({ data }) {
+  const dialogRef = useRef(null);
+
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-  const { bool: isOpen, setFalse, setTrue } = useBoolean(false);
+  const [dialogData, setDialogData] = useState(INITIAL_DIALOG_DATA);
   const [dialogHeader, setDialogHeader] = useState(null);
 
   const columns = useMemo(() => {
@@ -54,9 +61,10 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
+                setDialogData;
                 setFormData({ isDisabled: true, data: info.row.original });
                 setDialogHeader(DIALOG_LABELS.QUESTION_VIEW);
-                setTrue();
+                dialogRef.current.showModal();
               }}
             >
               <FaEye />
@@ -66,7 +74,8 @@ function QuestionTable({ data }) {
               onClick={() => {
                 setFormData({ isDisabled: false, data: info.row.original });
                 setDialogHeader(DIALOG_LABELS.QUESTION_UPDATE);
-                setTrue();
+
+                dialogRef.current.showModal();
               }}
             >
               <FaPen />
@@ -82,7 +91,7 @@ function QuestionTable({ data }) {
 
   return (
     <>
-      <Dialog header={dialogHeader} isOpen={isOpen} setFalse={setFalse} content={<QuestionForm {...formData} />} />
+      <QuestionDialog header={dialogHeader} formData={formData} dialogRef={dialogRef} />
       <Table data={data} columns={columns} />
     </>
   );
