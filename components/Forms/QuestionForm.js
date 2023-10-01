@@ -5,7 +5,7 @@ import InputField from "@/components/InputField";
 import { Formik, Form } from "formik";
 import { QUESTION_VALIDATION_SCHEMA } from "@/schemas/QuestionValidationSchema";
 import { PrimaryButton } from "../Buttons";
-import { DROP_DOWN_OPTIONS } from "@/constants";
+import { ACTION_TYPE, DROP_DOWN_OPTIONS } from "@/constants";
 
 const SUBJECTS = Object.freeze([{ label: "Math" }, { label: "Science" }, { label: "English" }]);
 const YEAR_LEVELS = Object.freeze([{ label: "1" }, { label: "2" }, { label: "3" }]);
@@ -21,11 +21,10 @@ const INITIAL_VALUES = Object.freeze({
   option_4: null,
   year_level: null,
   difficulty: null,
+  action_type: ACTION_TYPE.CREATE,
 });
 
-const FormButtons = () => {};
-
-function QuestionForm({ isDisabled = false, data = null, formikRef = null, isNew = false }) {
+function QuestionForm({ isDisabled = false, data = null, formikRef = null, handleSubmit = null, isNew = false }) {
   const [isDataReady, setIsDataReady] = useState(false);
   const [initialValues, setInitialValues] = useState(INITIAL_VALUES);
 
@@ -36,10 +35,6 @@ function QuestionForm({ isDisabled = false, data = null, formikRef = null, isNew
 
     setIsDataReady(true);
   }, [data]);
-
-  const handleSubmit = (values) => {
-    console.log(values);
-  };
 
   return (
     <Formik

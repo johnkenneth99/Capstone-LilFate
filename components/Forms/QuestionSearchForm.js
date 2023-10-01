@@ -4,7 +4,7 @@ import Dropdown from "@/components/Dropdown";
 import { PrimaryButton } from "@/components/Buttons";
 import { Form, Formik } from "formik";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { DROP_DOWN_OPTIONS, DIALOG_LABELS } from "@/constants";
+import { DROP_DOWN_OPTIONS, DIALOG_LABELS, ACTION_TYPE } from "@/constants";
 import QuestionDialog from "@/components/Dialogs/QuestionDialog";
 
 const DROP_DOWN_FIELDS = [
@@ -18,7 +18,7 @@ const INITIAL_VALUE = {
   status: null,
   subject: null,
   year_level: null,
-  difficulty: null,
+  action_type: ACTION_TYPE.SEARCH,
 };
 // TODO: Create validation schema for search form
 export default function QuestionSearchForm({ handleSubmit, ...props }) {
@@ -51,7 +51,7 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
           </Form>
         )}
       </Formik>
-      <QuestionDialog header={DIALOG_LABELS.QUESTION_ADD} dialogRef={dialogRef} isNew />
+      <QuestionDialog header={DIALOG_LABELS.QUESTION_ADD} dialogRef={dialogRef} handleSubmit={handleSubmit} isNew />
     </>
   );
 }

@@ -36,6 +36,13 @@ export const ACTIONS = {
   ERROR: 1,
 };
 
+export const ACTION_TYPE = {
+  SEARCH: 0,
+  CREATE: 1,
+  UPDATE: 2,
+  DELETE: 3,
+};
+
 export const DROP_DOWN_OPTIONS = {
   YEAR_LEVEL: [
     { value: "", label: "Select year level" },
