@@ -2,6 +2,7 @@ import { useEffect, useReducer, useRef } from "react";
 import { FIREBASE_CONFIG, ACTIONS, STATUS } from "@/constants";
 import { initializeApp } from "firebase/app";
 import { collection as getCollection, query as buildQuery, getDocs, getFirestore, addDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 const INITIAL_VALUE = {
   data: null,
@@ -32,6 +33,7 @@ const reducer = (state, { type, value }) => {
 };
 
 export default function useFireStore(name = null, ...constraints) {
+  const { reload } = useRouter();
   const collectionRef = useRef(null);
   const appRef = useRef(initializeApp(FIREBASE_CONFIG));
   const dbRef = useRef(getFirestore(appRef.current));
@@ -59,7 +61,11 @@ export default function useFireStore(name = null, ...constraints) {
       updated_by: 1,
     };
 
-    const documentRef = await addDoc(collectionRef.current, data);
+    addDoc(collectionRef.current, data)
+      .then(() => reload())
+      .catch((error) => {
+        throw new Error(error);
+      });
   };
 
   useEffect(() => {

@@ -24,3 +24,9 @@ export const QUESTION_SEARCH_FORM_VALIDATION = Yup.object()
   })
   .atLeastOneSelected(["status", "year_level", "difficulty", "subject"])
   .required(getMessage("V007"));
+
+export const CREATE_VALIDATION = Yup.object().shape({
+  subject: Yup.string().nullable().required(getMessage("V007")),
+  year_level: Yup.string().nullable().required(getMessage("V008")),
+  difficulty: Yup.string().nullable().required(getMessage("V009")),
+});

@@ -5,5 +5,7 @@ export const MESSAGES = {
   V004: "Option 2 is required.",
   V005: "Option 3 is required.",
   V006: "Option 4 is required.",
-  V007: "At least one field is required.",
+  V007: "Subject is required.",
+  V008: "Year Level is required.",
+  V009: "Difficulty is required.",
 };

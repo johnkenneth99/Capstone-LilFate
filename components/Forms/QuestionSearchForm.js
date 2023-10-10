@@ -1,5 +1,5 @@
 import { memo, useRef } from "react";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaXmark } from "react-icons/fa6";
 import Dropdown from "@/components/Dropdown";
 import { PrimaryButton } from "@/components/Buttons";
 import { Form, Formik } from "formik";
@@ -15,14 +15,25 @@ const DROP_DOWN_FIELDS = [
 ];
 
 const INITIAL_VALUE = {
-  status: null,
-  subject: null,
-  year_level: null,
+  status: "",
+  subject: "",
+  year_level: "",
+  difficulty: "",
   action_type: ACTION_TYPE.SEARCH,
 };
-// TODO: Create validation schema for search form
+
 export default function QuestionSearchForm({ handleSubmit, ...props }) {
   const dialogRef = useRef(null);
+
+  const handleDialogOpen = ({ setFieldValue }) => {
+    dialogRef.current.showModal();
+    setFieldValue("action_type", ACTION_TYPE.CREATE);
+  };
+
+  const handleOnSubmit = ({ setFieldValue, handleSubmit: handleFormSubmit }) => {
+    handleFormSubmit();
+    setFieldValue("action_type", ACTION_TYPE.SEARCH);
+  };
 
   return (
     <>
@@ -35,7 +46,7 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
         enableReinitialize
         {...props}
       >
-        {() => (
+        {({ handleReset, ...formikBag }) => (
           <Form>
             <div className="grid grid-cols-8 my-5 gap-5">
               {DROP_DOWN_FIELDS.map((item, index) => (
@@ -44,8 +55,9 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
                 </div>
               ))}
               <div className="flex justify-end items-end col-span-2 col-end-9 gap-5 ">
-                <PrimaryButton icon={<FaMagnifyingGlass />} label="Search" type="submit" />
-                <PrimaryButton label="Question" icon={<FaPlus />} onClick={() => dialogRef.current.showModal()} />
+                <PrimaryButton type="button" label="Clear" icon={<FaXmark />} onClick={() => handleReset()} />
+                <PrimaryButton type="button" label="Search" icon={<FaMagnifyingGlass />} onClick={() => handleOnSubmit(formikBag)} />
+                <PrimaryButton type="button" label="Question" icon={<FaPlus />} onClick={() => handleDialogOpen(formikBag)} />
               </div>
             </div>
           </Form>
