@@ -8,4 +8,7 @@ export const QUESTION_VALIDATION_SCHEMA = Yup.object().shape({
   option_2: Yup.string().nullable().required(getMessage("V004")),
   option_3: Yup.string().nullable().required(getMessage("V005")),
   option_4: Yup.string().nullable().required(getMessage("V006")),
+  subject: Yup.string().nullable().required(getMessage("V007")),
+  year_level: Yup.string().nullable().required(getMessage("V008")),
+  difficulty: Yup.string().nullable().required(getMessage("V009")),
 });

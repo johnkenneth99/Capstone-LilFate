@@ -45,27 +45,33 @@ export const ACTION_TYPE = {
 
 export const DROP_DOWN_OPTIONS = {
   YEAR_LEVEL: [
-    { value: "", label: "Select year level" },
+    { value: "", label: "Select year level", isHidden: true },
     { value: "1", label: "1" },
     { value: "2", label: "2" },
     { value: "3", label: "3" },
   ],
   DIFFICULTY: [
-    { value: "", label: "Select difficulty" },
+    { value: "", label: "Select difficulty", isHidden: true },
     { value: "easy", label: "Easy" },
     { value: "medium", label: "Medium" },
     { value: "hard", label: "Hard" },
   ],
   SUBJECT: [
-    { value: "", label: "Select subject" },
+    { value: "", label: "Select subject", isHidden: true },
     { value: "math", label: "Math" },
     { value: "science", label: "Science" },
     { value: "english", label: "English" },
   ],
   STATUS: [
-    { value: "", label: "Select status" },
+    { value: "", label: "Select status", isHidden: true },
     { value: 0, label: "Rejected" },
     { value: 1, label: "Approved" },
     { value: 2, label: "Pending" },
+  ],
+  LIMIT: [
+    { value: 10, label: "10" },
+    { value: 25, label: "25" },
+    { value: 50, label: "50" },
+    { value: 100, label: "100" },
   ],
 };
