@@ -26,9 +26,9 @@ export default function Dropdown({ name = null, label = null, options = [], disa
         {...props}
         {...field}
       >
-        {options.map(({ value, label }, index) => (
+        {options.map(({ value, label, isHidden }, index) => (
           <Fragment key={index}>
-            <option value={value} hidden={index === 0}>
+            <option value={value} hidden={index === 0 && isHidden}>
               {label}
             </option>
           </Fragment>

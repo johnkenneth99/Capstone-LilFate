@@ -12,15 +12,15 @@ const YEAR_LEVELS = Object.freeze([{ label: "1" }, { label: "2" }, { label: "3" 
 const DIFFICULTIES = Object.freeze([{ label: "Easy" }, { label: "Medium" }, { label: "Hard" }]);
 
 const INITIAL_VALUES = Object.freeze({
-  answer: null,
-  question: null,
-  subject: null,
-  option_1: null,
-  option_2: null,
-  option_3: null,
-  option_4: null,
-  year_level: null,
-  difficulty: null,
+  answer: "",
+  question: "",
+  subject: "",
+  option_1: "",
+  option_2: "",
+  option_3: "",
+  option_4: "",
+  year_level: "",
+  difficulty: "",
   action_type: ACTION_TYPE.CREATE,
 });
 
