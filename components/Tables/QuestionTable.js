@@ -1,30 +1,24 @@
 import classNames from "classnames";
-import { memo, useMemo, useRef, useState } from "react";
-import { FaEye, FaPen, FaTrashCan } from "react-icons/fa6";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { FaArrowLeft, FaArrowRight, FaEye, FaPen, FaTrashCan } from "react-icons/fa6";
 
 import Table from "@/components/Table";
 
 import QuestionDialog from "@/components/Dialogs/QuestionDialog";
-import { DIALOG_LABELS, STATUS, STATUS_LABEL } from "@/constants";
+import { DIALOG_LABELS, STATUS, STATUS_LABEL, ACTION_TYPE } from "@/constants";
 import { titleCase } from "@/functions/helpers";
-
-const INITIAL_FORM_DATA = Object.freeze({
-  isDisabled: false,
-  formData: null,
-});
+import { PrimaryButton } from "../Buttons";
 
 const INITIAL_DIALOG_DATA = Object.freeze({
-  isDisabled: false,
   data: null,
   header: null,
+  isDisabled: false,
 });
 
-function QuestionTable({ data }) {
+function QuestionTable({ data = [], handleSubmit = null }) {
   const dialogRef = useRef(null);
 
-  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [dialogData, setDialogData] = useState(INITIAL_DIALOG_DATA);
-  const [dialogHeader, setDialogHeader] = useState(null);
 
   const columns = useMemo(() => {
     return [
@@ -60,8 +54,9 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
-                setDialogData({ isDisabled: true, data: info.row.original, header: DIALOG_LABELS.QUESTION_VIEW });
+                const data = { isDisabled: true, data: info.row.original, header: DIALOG_LABELS.QUESTION_VIEW };
 
+                setDialogData(data);
                 dialogRef.current.showModal();
               }}
             >
@@ -70,14 +65,23 @@ function QuestionTable({ data }) {
             <button
               className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
               onClick={() => {
-                setDialogData({ isDisabled: false, data: info.row.original, header: DIALOG_LABELS.QUESTION_UPDATE });
+                const data = {
+                  handleSubmit,
+                  isDisabled: false,
+                  header: DIALOG_LABELS.QUESTION_UPDATE,
+                  data: { ...info.row.original, action_type: ACTION_TYPE.UPDATE },
+                };
 
+                setDialogData(data);
                 dialogRef.current.showModal();
               }}
             >
               <FaPen />
             </button>
-            <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400">
+            <button
+              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+              onClick={() => handleSubmit({ action_type: ACTION_TYPE.DELETE, id: info.row.original.id })}
+            >
               <FaTrashCan />
             </button>
           </div>

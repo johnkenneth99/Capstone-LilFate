@@ -11,7 +11,7 @@ export default function Table({ data = [], columns = [] }) {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th className="border p-4 bg-slate-600 text-white font-medium" key={header.id}>
+                <th className="border p-4 bg-slate-600 text-white font-medium sticky top-[-1px]" key={header.id}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}

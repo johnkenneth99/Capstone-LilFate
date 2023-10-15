@@ -1,26 +1,27 @@
-import { memo, useRef } from "react";
-import { FaPlus, FaXmark } from "react-icons/fa6";
-import Dropdown from "@/components/Dropdown";
 import { PrimaryButton } from "@/components/Buttons";
-import { Form, Formik } from "formik";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { DROP_DOWN_OPTIONS, DIALOG_LABELS, ACTION_TYPE } from "@/constants";
 import QuestionDialog from "@/components/Dialogs/QuestionDialog";
+import Dropdown from "@/components/Dropdown";
+import { ACTION_TYPE, DIALOG_LABELS, DROP_DOWN_OPTIONS } from "@/constants";
+import { Form, Formik } from "formik";
+import { Fragment, useRef } from "react";
+import { FaMagnifyingGlass, FaPlus, FaXmark } from "react-icons/fa6";
 
-const DROP_DOWN_FIELDS = [
+const DROP_DOWN_FIELDS = Object.freeze([
   { name: "subject", label: "Subject", options: DROP_DOWN_OPTIONS.SUBJECT },
   { name: "year_level", label: "Year Level", options: DROP_DOWN_OPTIONS.YEAR_LEVEL },
   { name: "difficulty", label: "Difficulty", options: DROP_DOWN_OPTIONS.DIFFICULTY },
   { name: "status", label: "Status", options: DROP_DOWN_OPTIONS.STATUS },
-];
+  { name: "limit_count", label: "Limit", options: DROP_DOWN_OPTIONS.LIMIT },
+]);
 
-const INITIAL_VALUE = {
+const INITIAL_VALUE = Object.freeze({
   status: "",
   subject: "",
   year_level: "",
   difficulty: "",
   action_type: ACTION_TYPE.SEARCH,
-};
+  limit_count: 10,
+});
 
 export default function QuestionSearchForm({ handleSubmit, ...props }) {
   const dialogRef = useRef(null);
@@ -30,13 +31,13 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
     setFieldValue("action_type", ACTION_TYPE.CREATE);
   };
 
-  const handleOnSubmit = ({ setFieldValue, handleSubmit: handleFormSubmit }) => {
-    handleFormSubmit();
+  const handleOnSubmit = ({ setFieldValue, handleSubmit }) => {
+    handleSubmit();
     setFieldValue("action_type", ACTION_TYPE.SEARCH);
   };
 
   return (
-    <>
+    <section className="shadow-md border sticky top-28 p-10 w-[20rem]">
       <Formik
         onSubmit={handleSubmit}
         initialValues={INITIAL_VALUE}
@@ -48,13 +49,13 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
       >
         {({ handleReset, ...formikBag }) => (
           <Form>
-            <div className="grid grid-cols-8 my-5 gap-5">
+            <div className="flex flex-col">
               {DROP_DOWN_FIELDS.map((item, index) => (
-                <div className="col-span-1" key={index}>
+                <div className="" key={index}>
                   <Dropdown {...item} />
                 </div>
               ))}
-              <div className="flex justify-end items-end col-span-2 col-end-9 gap-5 ">
+              <div className="flex flex-col mt-5 gap-3">
                 <PrimaryButton type="button" label="Clear" icon={<FaXmark />} onClick={() => handleReset()} />
                 <PrimaryButton type="button" label="Search" icon={<FaMagnifyingGlass />} onClick={() => handleOnSubmit(formikBag)} />
                 <PrimaryButton type="button" label="Question" icon={<FaPlus />} onClick={() => handleDialogOpen(formikBag)} />
@@ -64,6 +65,6 @@ export default function QuestionSearchForm({ handleSubmit, ...props }) {
         )}
       </Formik>
       <QuestionDialog header={DIALOG_LABELS.QUESTION_ADD} dialogRef={dialogRef} handleSubmit={handleSubmit} isNew />
-    </>
+    </section>
   );
 }

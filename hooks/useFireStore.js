@@ -1,22 +1,34 @@
 import { useEffect, useReducer, useRef } from "react";
-import { FIREBASE_CONFIG, ACTIONS, STATUS } from "@/constants";
+import { FIREBASE_CONFIG, ACTIONS, STATUS, COLLECTION } from "@/constants";
 import { initializeApp } from "firebase/app";
-import { collection as getCollection, query as buildQuery, getDocs, getFirestore, addDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
+import {
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  collection as getCollection,
+  query as buildQuery,
+  getFirestore,
+  startAfter,
+} from "firebase/firestore";
 
 const INITIAL_VALUE = {
   data: null,
   isError: false,
   isLoading: true,
   errorMessage: null,
+  isConcatenated: false,
   mutate: () => {},
 };
 
-const reducer = (state, { type, value }) => {
+const reducer = (state, { type, value, isConcatenated }) => {
   switch (type) {
     case ACTIONS.SUCCESS:
       return {
         ...state,
+        isConcatenated,
         data: value,
         isError: false,
         isLoading: false,
@@ -24,6 +36,7 @@ const reducer = (state, { type, value }) => {
     case ACTIONS.ERROR:
       return {
         ...state,
+        isConcatenated,
         data: null,
         isError: true,
         isLoading: false,
@@ -34,6 +47,7 @@ const reducer = (state, { type, value }) => {
 
 export default function useFireStore(name = null, ...constraints) {
   const { reload } = useRouter();
+
   const collectionRef = useRef(null);
   const appRef = useRef(initializeApp(FIREBASE_CONFIG));
   const dbRef = useRef(getFirestore(appRef.current));
@@ -45,7 +59,8 @@ export default function useFireStore(name = null, ...constraints) {
 
     try {
       const querySnapshot = await getDocs(query);
-      dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot });
+
+      dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot, isConcatenated: false });
     } catch (error) {
       dispatch({ type: ACTIONS.ERROR, value: error });
     }
@@ -61,11 +76,58 @@ export default function useFireStore(name = null, ...constraints) {
       updated_by: 1,
     };
 
-    addDoc(collectionRef.current, data)
-      .then(() => reload())
-      .catch((error) => {
-        throw new Error(error);
-      });
+    try {
+      await addDoc(collectionRef.current, data);
+
+      reload();
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const updateDocument = async ({ id, option_1, option_2, option_3, option_4, ...rest }) => {
+    const documentRef = doc(dbRef.current, COLLECTION.QUESTIONS, id);
+
+    const params = {
+      updated_by: 1,
+      status: STATUS.PENDING,
+      updated_at: new Date().toJSON(),
+      choices: [option_1, option_2, option_3, option_4],
+      ...rest,
+    };
+
+    try {
+      await updateDoc(documentRef, params);
+
+      reload();
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const deleteDocument = async ({ id, collection_name }) => {
+    const documentRef = doc(dbRef.current, collection_name, id);
+
+    try {
+      await deleteDoc(documentRef);
+
+      reload();
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const getNext = async (lastDocument, ...currentQuery) => {
+    const query = buildQuery(collectionRef.current, ...currentQuery, startAfter(lastDocument));
+    console.log(query);
+
+    try {
+      const querySnapshot = await getDocs(query);
+
+      dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot, isConcatenated: true });
+    } catch (error) {
+      dispatch({ type: ACTIONS.ERROR, value: error });
+    }
   };
 
   useEffect(() => {
@@ -80,7 +142,7 @@ export default function useFireStore(name = null, ...constraints) {
         try {
           const querySnapshot = await getDocs(query);
 
-          dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot });
+          dispatch({ type: ACTIONS.SUCCESS, value: querySnapshot, isConcatenated: false });
         } catch (error) {
           dispatch({ type: ACTIONS.ERROR, value: error });
         }
@@ -88,5 +150,5 @@ export default function useFireStore(name = null, ...constraints) {
     }
   }, []);
 
-  return { ...state, search, addDocument };
+  return { ...state, search, getNext, addDocument, updateDocument, deleteDocument };
 }
