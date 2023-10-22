@@ -13,7 +13,7 @@ import { PrimaryButton } from "@/components/Buttons";
 
 export default function Index() {
   const [documents, setDocuments] = useState([]);
-  const [currentQuery, setCurrentQuery] = useState([limit(14)]);
+  const [currentQuery, setCurrentQuery] = useState([limit(10)]);
   const [isLastPage, setIsLastPage] = useState(false);
 
   const { data, isConcatenated, search, getNext, isLoading, addDocument, updateDocument, deleteDocument } = useFireStore(
@@ -51,7 +51,7 @@ export default function Index() {
           if (!isAllObjectValueEmpty(values)) {
             for (const [key, value] of Object.entries(values)) {
               if (Boolean(value)) {
-                query.push(where(String(key), "==", castValue(key, value)));
+                query.push(where(key, "==", value));
               }
             }
           }
@@ -82,14 +82,6 @@ export default function Index() {
       default:
         throw new Error("Invalid action type.");
     }
-  };
-
-  const castValue = (key, value) => {
-    return isNumberValue(key) ? Number(value) : String(value);
-  };
-
-  const isNumberValue = (key) => {
-    return key === "status" || key === "year_level";
   };
 
   return (

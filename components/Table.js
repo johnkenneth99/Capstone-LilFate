@@ -1,8 +1,15 @@
 import classNames from "classnames";
 import { useReactTable, flexRender, getCoreRowModel } from "@tanstack/react-table";
+import { useEffect } from "react";
 
-export default function Table({ data = [], columns = [] }) {
-  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
+export default function Table({ data = [], columns = [], columnVisibility = {} }) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    enableHiding: true,
+    state: { columnVisibility },
+  });
 
   return (
     <section className="flex flex-row justify-center items-center">

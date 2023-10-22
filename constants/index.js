@@ -15,9 +15,9 @@ export const DIALOG_LABELS = {
 };
 
 export const STATUS = {
-  REJECTED: 0,
-  APPROVED: 1,
-  PENDING: 2,
+  REJECTED: "rejected",
+  APPROVED: "approved",
+  PENDING: "pending",
 };
 
 export const STATUS_LABEL = {
@@ -27,7 +27,7 @@ export const STATUS_LABEL = {
 };
 
 export const COLLECTION = {
-  QUESTIONS: "questions_updated",
+  QUESTIONS: "questions",
   USERS: "users",
 };
 
@@ -52,21 +52,21 @@ export const DROP_DOWN_OPTIONS = {
   ],
   DIFFICULTY: [
     { value: "", label: "Select difficulty", isHidden: true },
-    { value: "easy", label: "Easy" },
-    { value: "medium", label: "Medium" },
-    { value: "hard", label: "Hard" },
+    { value: "Easy", label: "Easy" },
+    { value: "Medium", label: "Medium" },
+    { value: "Hard", label: "Hard" },
   ],
   SUBJECT: [
     { value: "", label: "Select subject", isHidden: true },
-    { value: "math", label: "Math" },
-    { value: "science", label: "Science" },
-    { value: "english", label: "English" },
+    { value: "Math", label: "Math" },
+    { value: "Science", label: "Science" },
+    { value: "English", label: "English" },
   ],
   STATUS: [
     { value: "", label: "Select status", isHidden: true },
-    { value: 0, label: "Rejected" },
-    { value: 1, label: "Approved" },
-    { value: 2, label: "Pending" },
+    { value: "rejected", label: "Rejected" },
+    { value: "approved", label: "Approved" },
+    { value: "pending", label: "Pending" },
   ],
   LIMIT: [
     { value: 10, label: "10" },

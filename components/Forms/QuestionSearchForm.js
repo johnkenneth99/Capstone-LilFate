@@ -8,7 +8,7 @@ import { FaMagnifyingGlass, FaPlus, FaXmark } from "react-icons/fa6";
 
 const DROP_DOWN_FIELDS = Object.freeze([
   { name: "subject", label: "Subject", options: DROP_DOWN_OPTIONS.SUBJECT },
-  { name: "year_level", label: "Year Level", options: DROP_DOWN_OPTIONS.YEAR_LEVEL },
+  { name: "level", label: "Year Level", options: DROP_DOWN_OPTIONS.YEAR_LEVEL },
   { name: "difficulty", label: "Difficulty", options: DROP_DOWN_OPTIONS.DIFFICULTY },
   { name: "status", label: "Status", options: DROP_DOWN_OPTIONS.STATUS },
   { name: "limit_count", label: "Limit", options: DROP_DOWN_OPTIONS.LIMIT },
@@ -17,7 +17,7 @@ const DROP_DOWN_FIELDS = Object.freeze([
 const INITIAL_VALUE = Object.freeze({
   status: "",
   subject: "",
-  year_level: "",
+  level: "",
   difficulty: "",
   action_type: ACTION_TYPE.SEARCH,
   limit_count: 10,

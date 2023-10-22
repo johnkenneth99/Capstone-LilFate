@@ -1,13 +1,13 @@
 import classNames from "classnames";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { FaArrowLeft, FaArrowRight, FaEye, FaPen, FaTrashCan } from "react-icons/fa6";
+import { memo, useMemo, useRef, useState, useEffect, Fragment } from "react";
+import { FaCheck, FaEye, FaPen, FaTrashCan, FaX } from "react-icons/fa6";
 
 import Table from "@/components/Table";
 
 import QuestionDialog from "@/components/Dialogs/QuestionDialog";
-import { DIALOG_LABELS, STATUS, STATUS_LABEL, ACTION_TYPE } from "@/constants";
+import { ACTION_TYPE, DIALOG_LABELS, STATUS } from "@/constants";
 import { titleCase } from "@/functions/helpers";
-import { PrimaryButton } from "../Buttons";
+import useFireStore from "@/hooks/useFireStore";
 
 const INITIAL_DIALOG_DATA = Object.freeze({
   data: null,
@@ -16,14 +16,29 @@ const INITIAL_DIALOG_DATA = Object.freeze({
 });
 
 function QuestionTable({ data = [], handleSubmit = null }) {
+  const {
+    auth: { currentUser },
+  } = useFireStore();
+
   const dialogRef = useRef(null);
 
+  const [columnVisibility, setColumnVisibility] = useState({});
   const [dialogData, setDialogData] = useState(INITIAL_DIALOG_DATA);
+
+  useEffect(() => {
+    (async () => {
+      const {
+        claims: { admin = null },
+      } = await currentUser.getIdTokenResult();
+
+      setColumnVisibility({ ...(!admin && { status: false }) });
+    })();
+  }, []);
 
   const columns = useMemo(() => {
     return [
       { header: "Subject", accessorKey: "subject", cell: ({ getValue }) => <>{getValue() && titleCase(getValue())}</> },
-      { header: "Year Level", accessorKey: "year_level" },
+      { header: "Year Level", accessorKey: "level" },
       { header: "Difficulty", accessorKey: "difficulty", cell: ({ getValue }) => <>{getValue() && titleCase(getValue())}</> },
       { header: "Question", accessorKey: "question" },
       {
@@ -42,50 +57,72 @@ function QuestionTable({ data = [], handleSubmit = null }) {
                 { "bg-yellow-500": getValue() === STATUS.PENDING }
               )}
             >
-              {STATUS_LABEL[getValue()]}
+              {getValue()}
             </p>
           </div>
         ),
       },
       {
         header: "Actions",
-        cell: (info) => (
-          <div className="flex items-center justify-center gap-5">
-            <button
-              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
-              onClick={() => {
-                const data = { isDisabled: true, data: info.row.original, header: DIALOG_LABELS.QUESTION_VIEW };
+        cell: (info) => {
+          const {
+            row: { original },
+          } = info;
 
-                setDialogData(data);
-                dialogRef.current.showModal();
-              }}
-            >
-              <FaEye />
-            </button>
-            <button
-              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
-              onClick={() => {
-                const data = {
-                  handleSubmit,
-                  isDisabled: false,
-                  header: DIALOG_LABELS.QUESTION_UPDATE,
-                  data: { ...info.row.original, action_type: ACTION_TYPE.UPDATE },
-                };
+          const { status, created_by } = original;
+          return (
+            <div className="flex items-center justify-center gap-5">
+              {status === STATUS.PENDING ? (
+                <Fragment>
+                  <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400" onClick={() => console.log("clicked")}>
+                    <FaCheck />
+                  </button>
+                  <button className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400" onClick={() => console.log("clicked")}>
+                    <FaX />
+                  </button>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <button
+                    className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+                    onClick={() => {
+                      const data = { isDisabled: true, data: info.row.original, header: DIALOG_LABELS.QUESTION_VIEW };
 
-                setDialogData(data);
-                dialogRef.current.showModal();
-              }}
-            >
-              <FaPen />
-            </button>
-            <button
-              className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
-              onClick={() => handleSubmit({ action_type: ACTION_TYPE.DELETE, id: info.row.original.id })}
-            >
-              <FaTrashCan />
-            </button>
-          </div>
-        ),
+                      setDialogData(data);
+                      dialogRef.current.showModal();
+                    }}
+                  >
+                    <FaEye />
+                  </button>
+                  {created_by === currentUser.uid && (
+                    <button
+                      className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+                      onClick={() => {
+                        const data = {
+                          handleSubmit,
+                          isDisabled: false,
+                          header: DIALOG_LABELS.QUESTION_UPDATE,
+                          data: { ...info.row.original, action_type: ACTION_TYPE.UPDATE },
+                        };
+
+                        setDialogData(data);
+                        dialogRef.current.showModal();
+                      }}
+                    >
+                      <FaPen />
+                    </button>
+                  )}
+                  <button
+                    className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
+                    onClick={() => handleSubmit({ action_type: ACTION_TYPE.DELETE, id: info.row.original.id })}
+                  >
+                    <FaTrashCan />
+                  </button>
+                </Fragment>
+              )}
+            </div>
+          );
+        },
       },
     ];
   }, []);
@@ -93,7 +130,7 @@ function QuestionTable({ data = [], handleSubmit = null }) {
   return (
     <>
       <QuestionDialog dialogRef={dialogRef} {...dialogData} />
-      <Table data={data} columns={columns} />
+      <Table data={data} columns={columns} columnVisibility={columnVisibility} />
     </>
   );
 }

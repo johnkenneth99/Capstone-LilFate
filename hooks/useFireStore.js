@@ -1,7 +1,8 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { FIREBASE_CONFIG, ACTIONS, STATUS, COLLECTION } from "@/constants";
 import { initializeApp } from "firebase/app";
 import { useRouter } from "next/router";
+import { getAuth } from "firebase/auth";
 import {
   doc,
   getDocs,
@@ -52,6 +53,7 @@ export default function useFireStore(name = null, ...constraints) {
   const appRef = useRef(initializeApp(FIREBASE_CONFIG));
   const dbRef = useRef(getFirestore(appRef.current));
 
+  const [auth, _] = useState(getAuth(appRef.current));
   const [state, dispatch] = useReducer(reducer, INITIAL_VALUE);
 
   const search = async (constraints) => {
@@ -67,6 +69,10 @@ export default function useFireStore(name = null, ...constraints) {
   };
 
   const addDocument = async (params) => {
+    const { option_1, option_2, option_3, option_4, ...rest } = values;
+
+    const modifiedValues = { collection_name: COLLECTION.QUESTIONS, choices: [option_1, option_2, option_3, option_4], ...rest };
+
     const data = {
       ...params,
       status: STATUS.PENDING,
@@ -119,7 +125,6 @@ export default function useFireStore(name = null, ...constraints) {
 
   const getNext = async (lastDocument, ...currentQuery) => {
     const query = buildQuery(collectionRef.current, ...currentQuery, startAfter(lastDocument));
-    console.log(query);
 
     try {
       const querySnapshot = await getDocs(query);
@@ -131,7 +136,8 @@ export default function useFireStore(name = null, ...constraints) {
   };
 
   useEffect(() => {
-    if (dbRef.current === null) return;
+    if (dbRef.current === null || !name) return;
+    console.log(name);
 
     collectionRef.current = getCollection(dbRef.current, name);
 
@@ -150,5 +156,5 @@ export default function useFireStore(name = null, ...constraints) {
     }
   }, []);
 
-  return { ...state, search, getNext, addDocument, updateDocument, deleteDocument };
+  return { ...state, auth, search, getNext, addDocument, updateDocument, deleteDocument };
 }
