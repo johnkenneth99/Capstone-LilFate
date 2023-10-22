@@ -53,7 +53,7 @@ export default function useFireStore(name = null, ...constraints) {
   const appRef = useRef(initializeApp(FIREBASE_CONFIG));
   const dbRef = useRef(getFirestore(appRef.current));
 
-  const [auth, _] = useState(getAuth(appRef.current));
+  const [auth, setAuth] = useState(getAuth(appRef.current));
   const [state, dispatch] = useReducer(reducer, INITIAL_VALUE);
 
   const search = async (constraints) => {

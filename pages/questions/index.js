@@ -11,7 +11,7 @@ import QuestionSearchForm from "@/components/Forms/QuestionSearchForm";
 import { ACTION_TYPE, COLLECTION } from "@/constants";
 import { PrimaryButton } from "@/components/Buttons";
 
-export default function Index() {
+export default function Questions() {
   const [documents, setDocuments] = useState([]);
   const [currentQuery, setCurrentQuery] = useState([limit(10)]);
   const [isLastPage, setIsLastPage] = useState(false);

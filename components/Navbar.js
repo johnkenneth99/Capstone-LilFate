@@ -17,10 +17,6 @@ function Navbar() {
   const { auth } = useFireStore();
   const { pathname, push } = useRouter();
 
-  useEffect(() => {
-    console.log(pathname);
-  }, [pathname]);
-
   const handleSignOut = async () => {
     await signOut(auth);
     push(PAGES.LOGIN);
