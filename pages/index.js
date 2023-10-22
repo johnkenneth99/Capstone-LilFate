@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { useEffect, useRef } from "react";
 import { AUTHENTICATION } from "@/constants/messages";
+import { PAGES } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,16 +27,16 @@ export default function Home() {
   const { auth } = useFireStore();
 
   useEffect(() => {
-    auth?.currentUser && push("questions");
+    auth?.currentUser && push(PAGES.QUESTION);
   }, []);
 
   const handleSubmit = async ({ email, password }) => {
     try {
-      await setPersistence(auth.current, browserLocalPersistence);
+      await setPersistence(auth, browserLocalPersistence);
 
-      const test = await signInWithEmailAndPassword(auth.current, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
-      push("questions");
+      push(PAGES.QUESTION);
     } catch ({ code, message }) {
       const {
         current: { setErrors },
@@ -49,7 +50,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col justify-center items-center w-full min-h-screen bg-slate-50 overflow-hidden">
-      <h1 className="font-bold text-[5rem]">LILFATE WEB APPLICATION</h1>
+      <h1 className="font-bold text-[2rem] md:text-[5rem]">LILFATE WEB APPLICATION</h1>
       <Formik innerRef={formikRef} initialValues={INITIAL_VALUES} onSubmit={handleSubmit} enableReinitialize>
         {() => (
           <Form className="flex flex-col items-center justify-center min-w-fit w-1/3 bg-white gap-5 p-24 shadow-lg my-10">

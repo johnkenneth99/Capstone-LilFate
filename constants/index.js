@@ -43,6 +43,11 @@ export const ACTION_TYPE = {
   DELETE: 3,
 };
 
+export const PAGES = {
+  QUESTION: "questions",
+  LOGIN: "/",
+};
+
 export const DROP_DOWN_OPTIONS = {
   YEAR_LEVEL: [
     { value: "", label: "Select year level", isHidden: true },

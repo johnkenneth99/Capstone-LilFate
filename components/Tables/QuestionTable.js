@@ -94,7 +94,7 @@ function QuestionTable({ data = [], handleSubmit = null }) {
                   >
                     <FaEye />
                   </button>
-                  {created_by === currentUser.uid && (
+                  {created_by === currentUser?.uid && (
                     <button
                       className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
                       onClick={() => {

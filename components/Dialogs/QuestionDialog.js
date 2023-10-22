@@ -11,10 +11,6 @@ export default function QuestionDialog({ header = null, dialogRef = null, ...pro
     if (!dialogRef) return;
 
     dialogRef.current.addEventListener("keydown", handleKeydownEvent);
-
-    return () => {
-      dialogRef.current.removeEventListener("keydown", handleKeydownEvent);
-    };
   }, [dialogRef]);
 
   const handleKeydownEvent = ({ isTrusted, keyCode }) => {
