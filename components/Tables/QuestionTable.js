@@ -33,7 +33,7 @@ function QuestionTable({ data = [], handleSubmit = null }) {
 
   const dialogRef = useRef(null);
 
-  const [isApproveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -97,7 +97,7 @@ function QuestionTable({ data = [], handleSubmit = null }) {
                   <button
                     className="text-white bg-slate-600 rounded p-3 hover:bg-slate-400"
                     onClick={() => {
-                      setApproveDialogOpen(true);
+                      setIsApproveDialogOpen(true);
                       setConfirmationParams({ isApproved: true, id, uid });
                     }}
                   >
@@ -179,7 +179,7 @@ function QuestionTable({ data = [], handleSubmit = null }) {
       <Dialog isOpen={isApproveDialogOpen} hasHeader={false}>
         <ApproveDialogContent
           isProcessing={isProcessing}
-          setIsDialogOpen={setIsRejectDialogOpen}
+          setIsDialogOpen={setIsApproveDialogOpen}
           onSubmit={() => handleStatusUpdate(confirmationParams)}
         />
       </Dialog>
