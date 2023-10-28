@@ -53,7 +53,7 @@ function QuestionForm({ isDisabled = false, data = null, formikRef = null, handl
             <section className="grid grid-rows-5 grid-cols-2 gap-0 p-5">
               <div className="grid grid-cols-3 gap-3 col-span-2">
                 <Dropdown label="Subject" name="subject" options={DROP_DOWN_OPTIONS.SUBJECT} disabled={isDisabled} />
-                <Dropdown label="Year Level" name="year_level" options={DROP_DOWN_OPTIONS.YEAR_LEVEL} disabled={isDisabled} />
+                <Dropdown label="Year Level" name="level" options={DROP_DOWN_OPTIONS.YEAR_LEVEL} disabled={isDisabled} />
                 <Dropdown label="Difficulty" name="difficulty" options={DROP_DOWN_OPTIONS.DIFFICULTY} disabled={isDisabled} />
               </div>
               <div className="row-span-2 grid gap-3 col-span-2">
