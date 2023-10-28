@@ -53,6 +53,9 @@ export default function useFireStore(name = null, ...constraints) {
   const appRef = useRef(initializeApp(FIREBASE_CONFIG));
   const dbRef = useRef(getFirestore(appRef.current));
 
+  const app = useRef(initializeApp(FIREBASE_CONFIG));
+  const firestore = useRef(getFirestore(app.current));
+
   const [auth, setAuth] = useState(getAuth(appRef.current));
   const [state, dispatch] = useReducer(reducer, INITIAL_VALUE);
 
@@ -156,5 +159,5 @@ export default function useFireStore(name = null, ...constraints) {
     }
   }, []);
 
-  return { ...state, auth, search, getNext, addDocument, updateDocument, deleteDocument };
+  return { ...state, auth, firestore, search, getNext, addDocument, updateDocument, deleteDocument };
 }

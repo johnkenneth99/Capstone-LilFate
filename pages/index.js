@@ -1,12 +1,13 @@
 import InputField from "@/components/InputField";
+import Spinner from "@/components/Spinner";
+import { PAGES } from "@/constants";
+import { AUTHENTICATION } from "@/constants/messages";
 import useFireStore from "@/hooks/useFireStore";
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { Form, Formik } from "formik";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { useEffect, useRef } from "react";
-import { AUTHENTICATION } from "@/constants/messages";
-import { PAGES } from "@/constants";
+import { useEffect, useRef, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,21 +23,20 @@ const INITIAL_VALUES = Object.freeze({
 
 export default function Home() {
   const formikRef = useRef(null);
-
   const { push } = useRouter();
   const { auth } = useFireStore();
+  const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
     auth?.currentUser && push(PAGES.QUESTION);
   }, []);
 
   const handleSubmit = async ({ email, password }) => {
+    setIsloading(true);
     try {
       await setPersistence(auth, browserLocalPersistence);
 
-      await signInWithEmailAndPassword(auth, email, password);
-
-      push(PAGES.QUESTION);
+      await signInWithEmailAndPassword(auth, email, password).then(() => push(PAGES.QUESTION));
     } catch ({ code, message }) {
       const {
         current: { setErrors },
@@ -45,6 +45,7 @@ export default function Home() {
       const field = code.includes("email") || code.includes("user") ? "email" : "password";
 
       setErrors({ [field]: AUTHENTICATION[code] });
+      setIsloading(false);
     }
   };
 
@@ -58,8 +59,9 @@ export default function Home() {
             <InputField {...FIELDS.EMAIL} />
             <InputField {...FIELDS.PASSWORD} />
             <p className="ml-auto text-blue-500 cursor-pointer hover:text-blue-900 hover:underline">Forgot password?</p>
-            <button className="w-full bg-gray-800 rounded text-white text-xl font-medium p-2 hover:bg-gray-600" type="submit">
-              LOGIN
+
+            <button className="w-full bg-gray-800 rounded text-white text-xl font-medium p-2 hover:bg-gray-600" type="submit" disabled={isLoading}>
+              {isLoading ? <Spinner /> : `LOGIN`}
             </button>
           </Form>
         )}

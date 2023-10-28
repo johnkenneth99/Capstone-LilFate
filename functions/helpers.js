@@ -22,3 +22,7 @@ export const isAllObjectValueEmpty = (obj) => {
 
   return count === 0;
 };
+
+export const isNull = (variable) => {
+  return typeof variable === "object" && variable === null;
+};
