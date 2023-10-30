@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { FaCheck, FaEye, FaPen, FaTrashCan, FaX } from "react-icons/fa6";
 
 import Table from "@/components/Table";
@@ -24,7 +24,15 @@ const INITIAL_CONFIRMATION_PARAMS = Object.freeze({
   uid: null,
 });
 
-function QuestionTable({ data = [], handleSubmit = null }) {
+/**
+ * @param {array} data
+ *
+ * @param {function} handleSubmit
+ *
+ * @returns {React.Component}
+ */
+
+const QuestionTable = ({ data, handleSubmit }) => {
   const {
     auth: { currentUser },
   } = useFireStore();
@@ -193,6 +201,11 @@ function QuestionTable({ data = [], handleSubmit = null }) {
       </Dialog>
     </>
   );
-}
+};
 
-export default memo(QuestionTable);
+QuestionTable.defaultProps = {
+  data: [],
+  handleSubmit: () => {},
+};
+
+export default QuestionTable;

@@ -24,4 +24,10 @@ const ApproveDialogContent = ({ isProcessing, setIsDialogOpen, onSubmit }) => {
   );
 };
 
+ApproveDialogContent.defaultProps = {
+  isProcessing: false,
+  onSubmit: () => {},
+  setIsDialogOpen: () => {},
+};
+
 export default ApproveDialogContent;

@@ -1,19 +1,20 @@
 import { isNull } from "@/functions/helpers";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FaX } from "react-icons/fa6";
 
 /**
+ * @param {React.Component} children
  *
- * @param header The label of the dialog
+ * @param {string} header
  *
- * @param isOpen A boolean variable that toggles the dialog
+ * @param {boolean} showCloseButton
  *
- * @param showCloseButton A boolean that toggles the dialog's close button
+ * @param {boolean} hasHeader
  *
- *
+ * @returns {React.Component}
  */
 
-const Dialog = ({ children, isOpen = false, header = "", showCloseButton = true, hasHeader = true }) => {
+const Dialog = ({ children, isOpen, header, showCloseButton, hasHeader }) => {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const Dialog = ({ children, isOpen = false, header = "", showCloseButton = true,
   useEffect(() => {
     dialogRef.current.addEventListener("cancel", (event) => event.preventDefault());
   }, []);
+
   return (
     <dialog className="border-0 rounded shadow-md backdrop:bg-black backdrop:opacity-60" ref={dialogRef}>
       <div className="flex flex-col gap-5">
@@ -42,6 +44,13 @@ const Dialog = ({ children, isOpen = false, header = "", showCloseButton = true,
       </div>
     </dialog>
   );
+};
+
+Dialog.defaultProps = {
+  isOpen: true,
+  header: "Sample Header",
+  showCloseButton: true,
+  hasHeader: true,
 };
 
 export default Dialog;

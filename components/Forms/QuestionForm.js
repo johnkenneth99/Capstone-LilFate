@@ -7,10 +7,6 @@ import { QUESTION_VALIDATION_SCHEMA } from "@/schemas/QuestionValidationSchema";
 import { PrimaryButton } from "../Buttons";
 import { ACTION_TYPE, DROP_DOWN_OPTIONS } from "@/constants";
 
-const SUBJECTS = Object.freeze([{ label: "Math" }, { label: "Science" }, { label: "English" }]);
-const YEAR_LEVELS = Object.freeze([{ label: "1" }, { label: "2" }, { label: "3" }]);
-const DIFFICULTIES = Object.freeze([{ label: "Easy" }, { label: "Medium" }, { label: "Hard" }]);
-
 const INITIAL_VALUES = Object.freeze({
   answer: "",
   question: "",
